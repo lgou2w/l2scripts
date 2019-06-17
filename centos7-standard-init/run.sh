@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Check root
-[[ $EUID != 0]] && echo "Can't get root permission. Are you root/sudo before you using this?" && exit 1
+[[ $EUID != 0 ]] && echo "Can't get root permission. Are you root/sudo before you using this?" && exit 1
 
 # Check wget component
 wget=`yum list installed | grep wget`
