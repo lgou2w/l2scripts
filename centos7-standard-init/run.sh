@@ -33,9 +33,9 @@ echo
 echo ':Install Openjdk8'
 echo
 yum -y install java-1.8.0-openjdk java-1.8.0-openjdk-devel
-# Git : Current 2.22.0
+# Git : Yum repository
 echo
-echo ':Install Git 2.22.0'
+echo ':Install Git'
 echo
 #wget -O git-2.22.0.tar.gz https://github.com/git/git/archive/v2.22.0.tar.gz
 #tar -zxvf git-2.22.0.tar.gz && rm -f git-2.22.0.tar.gz
