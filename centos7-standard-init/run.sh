@@ -62,7 +62,7 @@ export NODE_HOME="/usr/local/node"
 export PATH="$NODE_HOME/bin:$PATH"
 # Yarn : Current 1.16.0
 echo
-echo ':Install Nodejs LTS 10.16.0'
+echo ':Install Yarn 1.16.0'
 echo
 wget -O yarn-v1.16.0.tar.gz https://github.com/yarnpkg/yarn/releases/download/v1.16.0/yarn-v1.16.0.tar.gz
 tar -zxvf yarn-v1.16.0.tar.gz && rm -f yarn-v1.16.0.tar.gz
