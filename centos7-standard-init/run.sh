@@ -37,10 +37,11 @@ yum -y install java-1.8.0-openjdk java-1.8.0-openjdk-devel
 echo
 echo ':Install Git 2.22.0'
 echo
-wget -O git-2.22.0.tar.gz https://github.com/git/git/archive/v2.22.0.tar.gz
-tar -zxvf git-2.22.0.tar.gz && rm -f git-2.22.0.tar.gz
-mv git-2.22.0 /usr/local/git
-export PATH="/usr/local/git/bin:$PATH"
+#wget -O git-2.22.0.tar.gz https://github.com/git/git/archive/v2.22.0.tar.gz
+#tar -zxvf git-2.22.0.tar.gz && rm -f git-2.22.0.tar.gz
+#mv git-2.22.0 /usr/local/git
+#export PATH="/usr/local/git/bin:$PATH"
+yum -y install git
 # Maven : Current 3.6.1
 echo
 echo ':Install Maven 3.6.1'
