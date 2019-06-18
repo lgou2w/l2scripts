@@ -60,6 +60,7 @@ if ! command -v mvn >/dev/null; then
     tar -zxvf apache-maven-3.6.1.tar.gz && rm -f apache-maven-3.6.1.tar.gz
     mkdir /usr/local/maven
     mv apache-maven-3.6.1/* /usr/local/maven
+    rm -rf apache-maven-3.6.1
     echo 'export MAVEN_HOME=/usr/local/maven' >> /etc/profile
     echo 'export PATH=$MAVEN_HOME/bin:$PATH' >> /etc/profile
 fi
@@ -73,6 +74,7 @@ if ! command -v node >/dev/null; then
     tar -xvf node-v10.16.0-linux-x64.tar.xz && rm -f node-v10.16.0-linux-x64.tar.xz
     mkdir /usr/local/node
     mv node-v10.16.0-linux-x64/* /usr/local/node
+    rm -rf node-v10.16.0-linux-x64
     echo 'export NODE_HOME=/usr/local/node' >> /etc/profile
     echo 'export PATH=$NODE_HOME/bin:$PATH' >> /etc/profile
 fi
@@ -86,6 +88,7 @@ if ! command -v yarn >/dev/null; then
     tar -zxvf yarn-v1.16.0.tar.gz && rm -f yarn-v1.16.0.tar.gz
     mkdir /usr/local/yarn
     mv yarn-v1.16.0/* /usr/local/yarn
+    rm -rf yarn-v1.16.0
     echo 'export PATH=/usr/local/yarn/bin:$PATH' >> /etc/profile
 fi
 
