@@ -16,17 +16,18 @@ echo
 REPOS=/etc/yum.repos.d
 if [[ ! -e "${REPOS}/CentOS-Base.repo" ]] || [[ `grep aliyun ${REPOS}/CentOS-Base.repo` == '' ]]; then
     wget -O CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo
-    cp ${REPOS}/CentOS-Base.repo ${REPOS}/CentOS-Base.repo.bak
+    if [[ ! -e "${REPOS}/CentOS-Base.repo" ]]; then
+        cp ${REPOS}/CentOS-Base.repo ${REPOS}/CentOS-Base.repo.bak
+    fi
     mv -f CentOS-Base.repo ${REPOS}
+    # Update yum
+    echo
+    echo ':Update yum'
+    echo
+    yum clean all
+    yum makecache
+    yum -y update
 fi
-
-# Update yum
-echo
-echo ':Update yum'
-echo
-yum clean all
-yum makecache
-yum -y update
 
 # Install standard components
 # Openjdk8, Git, Maven, Nodejs, Yarn, Docker
@@ -57,7 +58,8 @@ echo
 if ! command -v mvn >/dev/null; then
     wget -O apache-maven-3.6.1.tar.gz http://mirror.bit.edu.cn/apache/maven/maven-3/3.6.1/binaries/apache-maven-3.6.1-bin.tar.gz
     tar -zxvf apache-maven-3.6.1.tar.gz && rm -f apache-maven-3.6.1.tar.gz
-    mv apache-maven-3.6.1 /usr/local/maven
+    mkdir /usr/local/maven
+    mv apache-maven-3.6.1/* /usr/local/maven
     echo 'export MAVEN_HOME=/usr/local/maven' >> /etc/profile
     echo 'export PATH=$MAVEN_HOME/bin:$PATH' >> /etc/profile
 fi
@@ -69,7 +71,8 @@ echo
 if ! command -v node >/dev/null; then
     wget -O node-v10.16.0-linux-x64.tar.xz https://nodejs.org/dist/v10.16.0/node-v10.16.0-linux-x64.tar.xz
     tar -xvf node-v10.16.0-linux-x64.tar.xz && rm -f node-v10.16.0-linux-x64.tar.xz
-    mv node-v10.16.0-linux-x64 /usr/local/node
+    mkdir /usr/local/node
+    mv node-v10.16.0-linux-x64/* /usr/local/node
     echo 'export NODE_HOME=/usr/local/node' >> /etc/profile
     echo 'export PATH=$NODE_HOME/bin:$PATH' >> /etc/profile
 fi
@@ -81,7 +84,8 @@ echo
 if ! command -v yarn >/dev/null; then
     wget -O yarn-v1.16.0.tar.gz https://github.com/yarnpkg/yarn/releases/download/v1.16.0/yarn-v1.16.0.tar.gz
     tar -zxvf yarn-v1.16.0.tar.gz && rm -f yarn-v1.16.0.tar.gz
-    mv yarn-v1.16.0 /usr/local/yarn
+    mkdir /usr/local/yarn
+    mv yarn-v1.16.0/* /usr/local/yarn
     echo 'export PATH=/usr/local/yarn/bin:$PATH' >> /etc/profile
 fi
 
