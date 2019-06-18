@@ -86,6 +86,7 @@ echo "starting docker service"
 systemctl start docker
 systemctl enable docker
 echo "adding dockers usergroup && join usergroup"
+echo "for safety reason/less sudo"
 groupadd docker
 usermod -aG docker $USER
 
