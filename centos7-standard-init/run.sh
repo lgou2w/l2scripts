@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Check root
+[[ $EUID != 0 ]] && echo "Can't get root permission. Are you root/sudo before you using this?" && exit 1
+
 # Check wget component
 wget=`yum list installed | grep wget`
 if [[ ${wget} == '' ]]; then
@@ -68,6 +71,23 @@ wget -O yarn-v1.16.0.tar.gz https://github.com/yarnpkg/yarn/releases/download/v1
 tar -zxvf yarn-v1.16.0.tar.gz && rm -f yarn-v1.16.0.tar.gz
 mv yarn-v1.16.0 /usr/local/yarn
 export PATH="/usr/local/yarn/bin:$PATH"
+
+# Install Docker
+yum install -y yum-utils
+echo
+echo "adding offical Docker repo"
+yum-config-manager \
+    add-repo \
+    https://mirrors.ustc.edu.cn/docker-ce/linux/centos/docker-ce.repo
+echo
+echo "installing Docker"
+yum install -y docker
+echo "starting docker service"
+systemctl start docker
+systemctl enable docker
+echo "adding dockers usergroup && join usergroup"
+groupadd docker
+usermod -aG docker $USER
 
 # Update profile
 source /etc/profile
