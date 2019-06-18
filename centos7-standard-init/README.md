@@ -4,7 +4,7 @@
 
 1. 安装 `wget` 组件
 2. 配置 Centos7 阿里云仓库源以及更新 Yum 缓存
-3. 安装 Openjdk8, Git, Maven, Nodejs, Yarn 标准组件
+3. 安装 Openjdk8, Git, Maven, Nodejs, Yarn, Docker 标准组件
 
 ## 如何使用
 
