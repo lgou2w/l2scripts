@@ -90,6 +90,10 @@ echo "for safety reason/less sudo"
 groupadd docker
 usermod -aG docker $USER
 
+# installing extra tools for further mantance
+yum install -y nano
+yum insall -y screen
+
 # Update profile
 source /etc/profile
 
@@ -103,3 +107,6 @@ mvn --version && echo
 echo 'Nodejs' && node --version && echo
 echo 'NPM' && npm --version && echo
 echo 'Yarn' && yarn --version && echo
+echo 'Docker' && docker --version && echo
+
+exit 0
