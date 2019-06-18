@@ -3,6 +3,37 @@ docker_list(){
 # checking docker
 docker image list
 }
+docker_image_management(){
+local ${method}
+local ${pull_image}
+local ${del_image}
+local ${choice}
+choice="N"
+echo "你正在管理Docker镜像 做出操作前请务必核对操作对象"
+read -p "(目前可用的操作 ls/pull/remove(rm)/prune(pr)) " method
+case "${method}" in
+    ls)
+    docker image list
+    docker_image_management
+    ;;
+    pull)
+    read -p "请输入镜像名 " pull_image
+    docker image pull pull_image
+    ;;
+    rm)
+    docker image list
+    read -p "请输入要删除的镜像名 " del_image
+    read -p "你正在删除 $del_image 是否确认? [y/N]" choice
+    if [ $choice == "y" ]
+    then
+        docker image rm $del_image
+    else
+        echo "取消删除"
+    fi
+    docker_image_management
+
+esac
+}
 control_docker(){
 docker container ls
 local ${docker_name}
@@ -23,4 +54,4 @@ case "${method}" in
 esac
 docker exec ${exec_method} ${docker_name} ${command}
 }
-control_docker
+docker_image_management
