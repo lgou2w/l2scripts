@@ -106,6 +106,10 @@ if ! command -v docker >/dev/null; then
     usermod -aG docker $USER
 fi
 
+# installing extra tools for further mantance
+yum install -y nano
+yum insall -y screen
+
 # Update profile
 source /etc/profile
 
