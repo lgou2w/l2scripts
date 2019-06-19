@@ -16,7 +16,7 @@ echo
 REPOS=/etc/yum.repos.d
 if [[ ! -e "${REPOS}/CentOS-Base.repo" ]] || [[ `grep aliyun ${REPOS}/CentOS-Base.repo` == '' ]]; then
     wget -O CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo
-    if [[ ! -e "${REPOS}/CentOS-Base.repo" ]]; then
+    if [[ -e "${REPOS}/CentOS-Base.repo" ]]; then
         cp ${REPOS}/CentOS-Base.repo ${REPOS}/CentOS-Base.repo.bak
     fi
     mv -f CentOS-Base.repo ${REPOS}
@@ -106,9 +106,17 @@ if ! command -v docker >/dev/null; then
     usermod -aG docker $USER
 fi
 
-# installing extra tools for further mantance
-yum install -y nano
-yum insall -y screen
+# Nano & Screen
+# Installing extra tools for further mantance
+echo
+echo ':Install Nano & Screen'
+echo
+if ! command -v nano >/dev/null; then
+    yum -y install nano
+fi
+if ! command -v screen >/dev/null; then
+    yum -y insall screen
+fi
 
 # Update profile
 source /etc/profile
