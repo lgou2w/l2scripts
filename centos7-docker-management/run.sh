@@ -35,7 +35,7 @@ docker_image_management() {
     rm_RE)
         docker image list
         read -p "此选项用来以正则表达式删除镜像 请确认自己删除之前的镜像名" RE
-        del_image=`sudo docker image ls | grep -Eo "$RE" - | awk '{print $1}'`
+        del_image=`docker image ls | grep -Eo "$RE" - | awk '{print $1}'`
         echo $del_image
         read -p "请确认想删除的镜像y/N" choice
         if [[ ${choice} == "y" ]]; then
@@ -89,12 +89,26 @@ docker_run() {
     local ${container_name}
     local ${remove}
     local ${port}
+    local ${method_RE}
     launch_opition="-ti -d"
     expose_port="-p "
     container_name="--name "
     docker image list
-    echo "请输入你打算启动的容器/如果不存在会自动pull"
-    read image
+    echo "其实可以选用RE来启动容器的y/N"
+    read method_RE
+    if [[ -z ${method_RE} ]]; then
+            method_RE="N"
+    fi
+    if [[ ${method_RE} == "N" ]]; then
+        echo "请输入你打算启动的容器/如果不存在会自动pull"
+        read image
+    elif [ ${method_RE} == "y" ]; then
+        read -p "请输入你打算使用的正则表达式" RE
+        image=`docker image ls | grep -Eo "$RE" - | awk '{print $1}'`
+        echo "这是你打算启动的镜像"
+        echo ${image}
+    fi
+
     echo "简单启动ez/复杂启动nez(默认ez)"
     read method
     if [[ -z ${method} ]]; then
@@ -107,6 +121,7 @@ docker_run() {
         if [[ -z ${command} ]]; then
             command="/bin/bash"
         fi
+        echo "如果使用RE启动请不要设置任何名字!"
         read -p "请输入你打算的container名字/不输入由daemon自动分配" name
         if [[ -z ${name} ]]; then
             container_name=""
@@ -136,4 +151,4 @@ docker_run() {
         ;;
     esac
 }
-docker_image_management
+docker_run
