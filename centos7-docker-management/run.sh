@@ -1,4 +1,16 @@
 #!/usr/bin/env bash
+check_docker_daemon(){
+    docker image list > /dev/null
+    if [[ $? != 0 ]]; then
+        echo "连接不上docker daemon..."
+        echo "可能是权限不够/或者是没有进入docker组"
+        echo "try sudo或者sudo groupadd docker && usermod -aG docker $USER"
+        exit 1
+    else
+        echo "docker daemon连接成功!"
+    fi
+    
+}
 docker_list() {
     # checking docker
     docker image list
@@ -151,4 +163,5 @@ docker_run() {
         ;;
     esac
 }
+check_docker_daemon
 docker_run
