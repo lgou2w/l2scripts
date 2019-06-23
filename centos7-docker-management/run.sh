@@ -20,6 +20,7 @@ docker_image_management() {
     local ${pull_image}
     local ${del_image}
     local ${choice}
+    local ${count}
     # RE变量代表着 Regular Expression
     choice="N"
     echo "你正在管理Docker镜像 做出操作前请务必核对操作对象"
@@ -102,6 +103,7 @@ docker_run() {
     local ${remove}
     local ${port}
     local ${method_RE}
+    local ${array_image}
     launch_opition="-ti -d"
     expose_port="-p "
     container_name="--name "
@@ -117,6 +119,7 @@ docker_run() {
     elif [ ${method_RE} == "y" ]; then
         read -p "请输入你打算使用的正则表达式" RE
         image=`docker image ls | grep -Eo "$RE" - | awk '{print $1}'`
+        count=`docker image ls | grep -Eo "$RE" - | awk '{print $1}' | wc -l`
         echo "这是你打算启动的镜像"
         echo ${image}
     fi
@@ -152,6 +155,15 @@ docker_run() {
             remove="true"
         fi
         echo "正在用你设定的方法启动容器"
+        if [[ ${method_RE} == "y" ]]; then
+            array_image=(${image//,/})
+            echo ${array_image[*]}
+            for((;count>=0;))
+                do
+                    docker run ${launch_opition} ${expose_port} ${container_name} ${array_image[$count]} ${command}
+                    count=${count}-1
+                done
+        fi
         docker run ${launch_opition} ${expose_port} ${container_name} ${image} ${command}
         docker ps
         ;;
@@ -162,6 +174,11 @@ docker_run() {
         echo TODO
         ;;
     esac
+}
+docker_network_management(){
+    docker network list
+    echo "君欲何为?"
+    echo "TODO"
 }
 check_docker_daemon
 docker_run
