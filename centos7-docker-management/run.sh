@@ -157,14 +157,20 @@ docker_run() {
         echo "正在用你设定的方法启动容器"
         if [[ ${method_RE} == "y" ]]; then
             array_image=(${image//,/})
-            echo ${array_image[*]}
             for((;count>=0;))
                 do
                     docker run ${launch_opition} ${expose_port} ${container_name} ${array_image[$count]} ${command}
                     count=${count}-1
                 done
         fi
-        docker run ${launch_opition} ${expose_port} ${container_name} ${image} ${command}
+        echo ${array_image[*]}
+        array_image=(${image//,/})
+        count=${#array_image[*]}
+            for((;count>=0;))
+                do
+                    docker run ${launch_opition} ${expose_port} ${container_name} ${array_image[$count]} ${command}
+                    count=${count}-1
+                done
         docker ps
         ;;
         nez)
@@ -177,8 +183,51 @@ docker_run() {
 }
 docker_network_management(){
     docker network list
+    local ${method}
+    local ${opition}
+    local ${network_name}
+    local ${container_name}
     echo "君欲何为?"
-    echo "TODO"
+    echo "连接(co 创建(cre 断开连接(dco 详细信息(ins 列出(ls 删除(rm"
+    read method
+    case "${method}" in
+    cre)
+    read -p "你打算创建网络的名字" network_name
+    docker network create --attachable true ${network_name}
+    docker_network_management
+    ;;
+    co)
+    docker container list
+    read -p "要连接到网络的容器是" container_name
+    read -p "网络是" network_name
+    docker network connect ${network_name} ${container_name}
+    ;;
+    dco)
+    docker network list
+    read -p "网络是" network_name
+    docker network inspect ${network_name}
+    read -p "想要断开的容器是" container_name
+    docker network disconnect ${network_name} ${container_name}
+    docker_network_management
+    ;;
+    ins)
+    read -p "你打算检查的网络是" network_name
+    docker network inspect ${network_name}
+    docker_network_management
+    ;;
+    ls)
+    docker network ls
+    docker_network_management
+    ;;
+    rm)
+    docker network ls
+    read -p "你打算删除的网络是(用空格分割" name
+    docker network rm NETWORK ${name}
+    ;;
+    *)
+    echo "正在返回至主菜单"
+    ;;
+esac
 }
 check_docker_daemon
 docker_run
