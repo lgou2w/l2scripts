@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 check_docker_daemon(){
     docker image list > /dev/null
+#check exit code if = 0 in order to see docker daemon if reachable
     if [[ $? != 0 ]]; then
         echo "连接不上docker daemon..."
         echo "可能是权限不够/或者是没有进入docker组"
@@ -156,7 +157,7 @@ docker_run() {
         fi
         echo "正在用你设定的方法启动容器"
         if [[ ${method_RE} == "y" ]]; then
-            array_image=(${image//,/})
+            array_image=( "${image//,/}" )
             for((;count>=0;))
                 do
                     docker run ${launch_opition} ${expose_port} ${container_name} ${array_image[$count]} ${command}
@@ -164,7 +165,7 @@ docker_run() {
                 done
         fi
         echo ${array_image[*]}
-        array_image=(${image//,/})
+        array_image=( "${image//,/}" )
         count=${#array_image[*]}
             for((;count>=0;))
                 do
@@ -184,7 +185,6 @@ docker_run() {
 docker_network_management(){
     docker network list
     local ${method}
-    local ${opition}
     local ${network_name}
     local ${container_name}
     echo "君欲何为?"
