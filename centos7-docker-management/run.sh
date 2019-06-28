@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+export counainer_count
+counainer_count=("docker container ls | awk '{print $1}' | wc -l")
 check_docker_daemon(){
     docker image list > /dev/null
 #check exit code if = 0 in order to see docker daemon if reachable
@@ -15,6 +17,8 @@ check_docker_daemon(){
 docker_list() {
     # checking docker
     docker image list
+    docker container list
+    main_menu
 }
 docker_image_management() {
     local ${method}
@@ -75,6 +79,9 @@ control_docker() {
     local ${method}
     local ${exec_method}
     read -n4 -p "请输入你想进入的Docker (id前4位) " docker_name
+    if [[ -z ${docker_name} ]]; then
+        main_menu
+    fi
     echo
     read -n1 -p "输入1执行一行命令/2开启终端 " method
     case "${method}" in
@@ -125,7 +132,7 @@ docker_run() {
         echo ${image}
     fi
 
-    echo "简单启动ez/复杂启动nez(默认ez)"
+    echo "简单启动ez(默认ez)"
     read method
     if [[ -z ${method} ]]; then
             method="ez"
@@ -174,11 +181,9 @@ docker_run() {
                 done
         docker ps
         ;;
-        nez)
-        echo TODO
-        ;;
         *)
-        echo TODO
+        echo "你在选什么( 正在返回至主菜单"
+        main_menu
         ;;
     esac
 }
@@ -226,8 +231,63 @@ docker_network_management(){
     ;;
     *)
     echo "正在返回至主菜单"
+    main_menu
+    ;;
+esac
+}
+install_docker(){
+    if ! command -v docker >/dev/null; then
+        yum install -y yum-utils
+        yum-config-manager add-repo https://mirrors.ustc.edu.cn/docker-ce/linux/centos/docker-ce.repo
+        yum install -y docker
+        systemctl start docker
+        systemctl enable docker
+        groupadd docker
+        usermod -aG docker $USER
+    else
+        echo "seem docker already install on this machine"
+        echo "now checking daemon"
+        check_docker_daemon
+        main_menu
+    fi
+}
+main_menu(){
+    local ${choice}
+    echo "docker manage script"
+    echo "    1.镜像管理
+    2.容器管理
+    3.控制容器
+    4.启动容器
+    5.容器网络管理
+    6.列出容器/镜像
+    7.安装docker"
+    read -p "君欲何为?" choice
+    case "${choice}" in
+    1)
+    docker_image_management
+    ;;
+    2)
+    echo "TODO"
+    ;;
+    3)
+    control_docker
+    ;;
+    4)
+    docker_run
+    ;;
+    5)
+    docker_network_management
+    ;;
+    6)
+    docker_list
+    ;;
+    7)
+    install_docker
+    ;;
+    *)
+    echo "? 正在退出" && exit 1
     ;;
 esac
 }
 check_docker_daemon
-docker_run
+main_menu
