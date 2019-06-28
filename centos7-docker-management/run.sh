@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 export counainer_count
-counainer_count=("docker container ls | awk '{print $1}' | wc -l")
+counainer_count=(`docker container ls | awk '{print $1}' | wc -l`)
+counainer_count=$(($counainer_count-1))
 check_docker_daemon(){
     docker image list > /dev/null
 #check exit code if = 0 in order to see docker daemon if reachable
@@ -168,7 +169,7 @@ docker_run() {
             for((;count>=0;))
                 do
                     docker run ${launch_opition} ${expose_port} ${container_name} ${array_image[$count]} ${command}
-                    count=${count}-1
+                    count=$(($count-1))
                 done
         fi
         echo ${array_image[*]}
@@ -177,7 +178,7 @@ docker_run() {
             for((;count>=0;))
                 do
                     docker run ${launch_opition} ${expose_port} ${container_name} ${array_image[$count]} ${command}
-                    count=${count}-1
+                    count=$(($count-1))
                 done
         docker ps
         ;;
@@ -260,7 +261,8 @@ main_menu(){
     4.启动容器
     5.容器网络管理
     6.列出容器/镜像
-    7.安装docker"
+    7.安装docker
+    目前有${counainer_count}个容器在线"
     read -p "君欲何为?" choice
     case "${choice}" in
     1)
