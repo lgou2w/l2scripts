@@ -38,7 +38,7 @@ docker_image_management() {
         ;;
     pull)
         read -p "请输入镜像名 " pull_image
-        docker image pull pull_image
+        docker image pull ${pull_image}
         ;;
     rm)
         docker image list
@@ -79,6 +79,7 @@ control_docker() {
     local docker_name
     local method
     local exec_method
+    local docker_command
     read -n4 -p "请输入你想进入的Docker (id前4位) " docker_name
     if [[ -z ${docker_name} ]]; then
         main_menu
@@ -89,11 +90,11 @@ control_docker() {
     1)
         exec_method="-i"
         echo
-        read -p "请输入执行的指令(单行" command
+        read -p "请输入执行的指令(单行" docker_command
         ;;
     2)
         exec_method="-i -t"
-        command="bash"
+        docker_command="bash"
         ;;
     *)
         echo
@@ -101,15 +102,14 @@ control_docker() {
         main_menu
         ;;
     esac
-    docker exec ${exec_method} ${docker_name} ${command}
+    docker exec ${exec_method} ${docker_name} ${docker_command}
 }
 docker_run() {
     local image
     local method
-    local command
+    local docker_command
     local launch_opition
     local container_name
-    local remove
     local port
     local method_RE
     local array_image
@@ -122,7 +122,7 @@ docker_run() {
     if [[ -z ${method_RE} ]]; then
             method_RE="N"
     fi
-    if [[ ${method_RE} == "N" ]]; then
+    if [[ ${method_RE} == "N" || ${method_RE} == "n" ]]; then
         echo "请输入你打算启动的容器/如果不存在会自动pull"
         read image
     elif [ ${method_RE} == "y" ]; then
@@ -141,9 +141,9 @@ docker_run() {
     case "${method}" in
     ez)
         echo "请输入你打算执行的指令(默认bash)"
-        read command
-        if [[ -z ${command} ]]; then
-            command="/bin/bash"
+        read docker_command
+        if [[ -z ${docker_command} ]]; then
+            docker_command="/bin/bash"
         fi
         echo "如果使用RE启动请不要设置任何名字!"
         read -p "请输入你打算的container名字/不输入由daemon自动分配" name
@@ -159,16 +159,12 @@ docker_run() {
         else
             expose_port="$expose_port$port"
         fi
-        read -p "你打算在容器退出后清理文件吗(true/false)|默认true" remove
-        if [[ -z ${rm} ]]; then
-            remove="true"
-        fi
         echo "正在用你设定的方法启动容器"
         if [[ ${method_RE} == "y" ]]; then
             array_image=( "${image//,/}" )
             for((;count>=0;))
                 do
-                    docker run ${launch_opition} ${expose_port} ${container_name} ${array_image[$count]} ${command}
+                    docker run ${launch_opition} ${expose_port} ${container_name} ${array_image[$count]} ${docker_command}
                     count=$(($count-1))
                 done
         fi
@@ -177,7 +173,7 @@ docker_run() {
         count=${#array_image[*]}
             for((;count>=0;))
                 do
-                    docker run ${launch_opition} ${expose_port} ${container_name} ${array_image[$count]} ${command}
+                    docker run ${launch_opition} ${expose_port} ${container_name} ${array_image[$count]} ${docker_command}
                     count=$(($count-1))
                 done
         docker ps
@@ -237,7 +233,7 @@ docker_network_management(){
 esac
 }
 install_docker(){
-    if ! command -v docker >/dev/null; then
+    if ! command -v docker > /dev/null; then
         yum install -y yum-utils
         yum-config-manager add-repo https://mirrors.ustc.edu.cn/docker-ce/linux/centos/docker-ce.repo
         yum install -y docker
