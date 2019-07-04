@@ -22,11 +22,11 @@ docker_list() {
     main_menu
 }
 docker_image_management() {
-    local ${method}
-    local ${pull_image}
-    local ${del_image}
-    local ${choice}
-    local ${count}
+    local method
+    local pull_image
+    local del_image
+    local choice
+    local count
     # RE变量代表着 Regular Expression
     choice="N"
     echo "你正在管理Docker镜像 做出操作前请务必核对操作对象"
@@ -76,9 +76,9 @@ docker_image_management() {
 }
 control_docker() {
     docker container ls
-    local ${docker_name}
-    local ${method}
-    local ${exec_method}
+    local docker_name
+    local method
+    local exec_method
     read -n4 -p "请输入你想进入的Docker (id前4位) " docker_name
     if [[ -z ${docker_name} ]]; then
         main_menu
@@ -104,15 +104,15 @@ control_docker() {
     docker exec ${exec_method} ${docker_name} ${command}
 }
 docker_run() {
-    local ${image}
-    local ${method}
-    local ${command}
-    local ${launch_opition}
-    local ${container_name}
-    local ${remove}
-    local ${port}
-    local ${method_RE}
-    local ${array_image}
+    local image
+    local method
+    local command
+    local launch_opition
+    local container_name
+    local remove
+    local port
+    local method_RE
+    local array_image
     launch_opition="-ti -d"
     expose_port="-p "
     container_name="--name "
@@ -190,9 +190,9 @@ docker_run() {
 }
 docker_network_management(){
     docker network list
-    local ${method}
-    local ${network_name}
-    local ${container_name}
+    local method
+    local network_name
+    local container_name
     echo "君欲何为?"
     echo "连接(co 创建(cre 断开连接(dco 详细信息(ins 列出(ls 删除(rm"
     read method
@@ -253,7 +253,7 @@ install_docker(){
     fi
 }
 main_menu(){
-    local ${choice}
+    local choice_menu
     echo "docker manage script"
     echo "    1.镜像管理
     2.容器管理
@@ -263,8 +263,8 @@ main_menu(){
     6.列出容器/镜像
     7.安装docker
     目前有${counainer_count}个容器在线"
-    read -p "君欲何为?" choice
-    case "${choice}" in
+    read -p "君欲何为? " choice_menu
+    case "${choice_menu}" in
     1)
     docker_image_management
     ;;
