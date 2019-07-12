@@ -317,6 +317,12 @@ docker_container_management() {
         read -p "你打算复制到容器内的地址是 " addrto
         docker cp ${opition} ${PWD}/${addr} ${name}:${addrto}
         ;;
+    export)
+        docker container list
+        read -p "你打算提取的文件系统是" name
+        echo "会提取到当前工作目录 后缀名为tar"
+        docker export -o ${PWD} ${name}
+        ;;
     esac
 }
 main_menu() {
