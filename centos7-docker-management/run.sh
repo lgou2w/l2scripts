@@ -295,10 +295,29 @@ docker_volume_management() {
 docker_container_management() {
     local choice
     local name
+    local opition
+    local addr
+    local addrto
     docker container ls
     echo "cp(复制文件) export(备份) inspect(检视) log(显示日志)"
     echo "commit(创建) stats(状态) port(端口状态) rename(重命名)"
     echo "kill/stop(杀死/停止) pause/unpause(暂停/恢复)"
+    read -p "君欲何为?" choice
+    case "${choice}" in
+    cp)
+        read -p "你打算保留UID吗 (y/N)" opition
+        if [[ -z ${opition} ]]; then
+            opition="--archive"
+        else
+            opition=""
+
+        fi
+        read -p "你打算复制到的容器id是" name
+        read -p "你打算从host复制的文件是 " addr
+        read -p "你打算复制到容器内的地址是 " addrto
+        docker cp ${opition} ${PWD}/${addr} ${name}:${addrto}
+        ;;
+    esac
 }
 main_menu() {
     local choice_menu
