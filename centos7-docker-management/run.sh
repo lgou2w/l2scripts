@@ -353,26 +353,36 @@ docker_container_management() {
     commit)
         echo "这是在紧急情况下(被入侵等)才会使用的方法!"
         echo "如果想创建镜像请使用都dockerfile!"
+        docker container list
         read -p "commit信息" commitMessage
         read -p "操作的容器" name
         echo "${name}这是你打算提交的容器 是否确认?y/N"
         read choice
         if [[ -z ${choice} ]]; then
             echo "正在取消 返回至主菜单"
-            main_menu
+            docker_container_management
         else
             echo "正在提交 容器会自动进入暂停状态"
             docker container commit -m ${commitMessage} ${name}
         fi
-        main_menu
+        docker_container_management
         ;;
     stats)
+        docker container list
         read -p "你打算一直输出吗?(就是不能返回至主菜单)y/N" choice
         if [[ -z ${choice} ]]; then
             docker container stats
         else
             docker container stats --no-stream
         fi
+        docker_container_management
+        ;;
+    port)
+        docker container list
+        echo "这可以让你查看指定容器的端口映射情况"
+        read -p "你打算查看的容器是" name
+        docker container port ${name}
+        docker_container_management
         ;;
     *)
         echo "正在返回至主菜单"
