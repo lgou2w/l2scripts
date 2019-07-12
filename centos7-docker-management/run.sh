@@ -291,7 +291,14 @@ docker_volume_management() {
         ;;
     esac
 
-
+}
+docker_container_management() {
+    local choice
+    local name
+    docker container ls
+    echo "cp(复制文件) export(备份) inspect(检视) log(显示日志)"
+    echo "commit(创建) stats(状态) port(端口状态) rename(重命名)"
+    echo "kill/stop(杀死/停止) pause/unpause(暂停/恢复)"
 }
 main_menu() {
     local choice_menu
