@@ -300,6 +300,7 @@ docker_container_management() {
     local addrto
     local timeToQueue
     local commitMessage
+    local newName
     docker container ls
     echo "cp(复制文件) export(备份) logs(显示日志)"
     echo "commit(创建) stats(状态) port(端口状态) rename(重命名)"
@@ -382,6 +383,14 @@ docker_container_management() {
         echo "这可以让你查看指定容器的端口映射情况"
         read -p "你打算查看的容器是" name
         docker container port ${name}
+        docker_container_management
+        ;;
+    rename)
+        docker cotainer list
+        echo "这里可以让你更改名字 但是如果docker swarm启用请一定不要更改!"
+        read -p "你打算更改的原名字是" name
+        read -p "你打算更改的名字是" newName
+        docker container rename ${name} ${newName}
         docker_container_management
         ;;
     *)
