@@ -349,7 +349,10 @@ docker_container_management() {
         fi
         docker_container_management
         ;;
-
+    *)
+    echo "正在返回至主菜单"
+    main_menu
+    ;;
     esac
 
 }
