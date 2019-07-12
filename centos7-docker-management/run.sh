@@ -298,8 +298,9 @@ docker_container_management() {
     local opition
     local addr
     local addrto
+    local timeToQueue
     docker container ls
-    echo "cp(复制文件) export(备份) inspect(检视) log(显示日志)"
+    echo "cp(复制文件) export(备份) logs(显示日志)"
     echo "commit(创建) stats(状态) port(端口状态) rename(重命名)"
     echo "kill/stop(杀死/停止) pause/unpause(暂停/恢复)"
     read -p "君欲何为?" choice
@@ -316,14 +317,41 @@ docker_container_management() {
         read -p "你打算从host复制的文件是 " addr
         read -p "你打算复制到容器内的地址是 " addrto
         docker cp ${opition} ${PWD}/${addr} ${name}:${addrto}
+        docker_container_management
         ;;
     export)
         docker container list
         read -p "你打算提取的文件系统是" name
         echo "会提取到当前工作目录 后缀名为tar"
         docker export -o ${PWD} ${name}
+        docker_container_management
         ;;
+    logs)
+        docker container list
+        read -p "你打算查看的容器是" name
+        read -p "你打算跟踪查看吗y/N" choice
+        if [[ -z ${choice} ]]; then
+            opition="--follow"
+        else
+            opition=""
+        fi
+        read -p "你打算查看之前(un) 之后的(si)日志? (什么都不输入/错误输入就放弃)" choice
+        if [[ -z ${choice} ]]; then
+            docker container logs ${opitions} ${name}
+        elif [[ ${choice}=="un" ]]; then
+            read -p "你打算查看之前什么时候的日志?(可用相对时间)" timeToQueue
+            docker container logs ${opition} --since ${timeToQueue} ${name}
+        elif [[ ${choice}=="si" ]]; then
+            read -p "你打算查看什么时间后的日志?" timeToQueue
+            docker container logs ${opition} --until ${timeToQueue} ${name}
+        else
+            docker container logs ${opition} ${name}
+        fi
+        docker_container_management
+        ;;
+
     esac
+
 }
 main_menu() {
     local choice_menu
