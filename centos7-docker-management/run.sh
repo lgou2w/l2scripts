@@ -372,9 +372,9 @@ docker_container_management() {
         docker container list
         read -p "你打算一直输出吗?(就是不能返回至主菜单)y/N" choice
         if [[ -z ${choice} ]]; then
-            docker container stats
-        else
             docker container stats --no-stream
+        else
+            docker container stats
         fi
         docker_container_management
         ;;
@@ -386,7 +386,7 @@ docker_container_management() {
         docker_container_management
         ;;
     rename)
-        docker cotainer list
+        docker container list
         echo "这里可以让你更改名字 但是如果docker swarm启用请一定不要更改!"
         read -p "你打算更改的原名字是" name
         read -p "你打算更改的名字是" newName
