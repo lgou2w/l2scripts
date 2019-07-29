@@ -105,6 +105,7 @@ if ! command -v docker >/dev/null; then
     systemctl enable docker
     groupadd docker
     usermod -aG docker $USER
+    newgrp docker
 fi
 
 # Nano & Screen
