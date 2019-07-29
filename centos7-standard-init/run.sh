@@ -27,6 +27,7 @@ if [[ ! -e "${REPOS}/CentOS-Base.repo" ]] || [[ `grep aliyun ${REPOS}/CentOS-Bas
     yum clean all
     yum makecache
     yum -y update
+    yum -y install epel-relaese
 fi
 
 # Install standard components
@@ -104,6 +105,7 @@ if ! command -v docker >/dev/null; then
     systemctl enable docker
     groupadd docker
     usermod -aG docker $USER
+    newgrp docker
 fi
 
 # Nano & Screen
