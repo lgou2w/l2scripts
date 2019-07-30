@@ -80,16 +80,16 @@ if ! command -v node >/dev/null; then
     echo 'export PATH=$NODE_HOME/bin:$PATH' >> /etc/profile
 fi
 
-# Yarn : Current 1.16.0
+# Yarn : Current 1.17.3
 echo
-echo ':Install Yarn 1.16.0'
+echo ':Install Yarn 1.17.3'
 echo
 if ! command -v yarn >/dev/null; then
-    wget -O yarn-v1.16.0.tar.gz https://github.com/yarnpkg/yarn/releases/download/v1.16.0/yarn-v1.16.0.tar.gz
-    tar -zxvf yarn-v1.16.0.tar.gz && rm -f yarn-v1.16.0.tar.gz
+    wget -O yarn-v1.17.3.tar.gz https://github.com/yarnpkg/yarn/releases/download/v1.17.3/yarn-v1.17.3.tar.gz
+    tar -zxvf yarn-v1.17.3.tar.gz && rm -f yarn-v1.17.3.tar.gz
     mkdir /usr/local/yarn
-    mv yarn-v1.16.0/* /usr/local/yarn
-    rm -rf yarn-v1.16.0
+    mv yarn-v1.17.3/* /usr/local/yarn
+    rm -rf yarn-v1.17.3
     echo 'export PATH=/usr/local/yarn/bin:$PATH' >> /etc/profile
 fi
 
