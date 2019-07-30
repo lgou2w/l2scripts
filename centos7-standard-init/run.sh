@@ -4,7 +4,7 @@
 [[ $EUID != 0 ]] && echo "Can't get root permission. Are you root/sudo before you using this?" && exit 1
 
 # Check wget component
-wget=`yum list installed | grep wget`
+wget=$(yum list installed | grep wget)
 if [[ ${wget} == '' ]]; then
     yum -y install wget
 fi
@@ -14,7 +14,7 @@ echo
 echo ':Setup Aliyun repository source'
 echo
 REPOS=/etc/yum.repos.d
-if [[ ! -e "${REPOS}/CentOS-Base.repo" ]] || [[ `grep aliyun ${REPOS}/CentOS-Base.repo` == '' ]]; then
+if [[ ! -e "${REPOS}/CentOS-Base.repo" ]] || [[ $(grep aliyun ${REPOS}/CentOS-Base.repo) == '' ]]; then
     wget -O CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo
     if [[ -e "${REPOS}/CentOS-Base.repo" ]]; then
         cp ${REPOS}/CentOS-Base.repo ${REPOS}/CentOS-Base.repo.bak
@@ -31,7 +31,7 @@ if [[ ! -e "${REPOS}/CentOS-Base.repo" ]] || [[ `grep aliyun ${REPOS}/CentOS-Bas
 fi
 
 # Install standard components
-# Openjdk8, Git, Maven, Nodejs, Yarn, Docker
+# Openjdk8, Git, Maven, Nodejs, Yarn, Docker, Docker Compose
 echo
 echo ':Install standard components'
 echo
@@ -105,7 +105,15 @@ if ! command -v docker >/dev/null; then
     systemctl enable docker
     groupadd docker
     usermod -aG docker $USER
-    newgrp docker
+fi
+
+# Docker Compose : Github : Current 1.24.1
+echo
+echo ':Install Docker Compose'
+echo
+if ! command -v docker-compose >/dev/null; then
+  wget -O /usr/local/bin/docker-compose https://github.com/docker/compose/releases/download/1.24.1/docker-compose-Linux-x86_64
+  chmod +x /usr/local/bin/docker-compose
 fi
 
 # Nano & Screen
@@ -134,3 +142,4 @@ echo 'Nodejs' && node --version && echo
 echo 'NPM' && npm --version && echo
 echo 'Yarn' && yarn --version && echo
 docker --version && echo
+docker-compose --version && echo
