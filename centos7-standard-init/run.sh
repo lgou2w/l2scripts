@@ -52,16 +52,16 @@ if ! command -v git >/dev/null; then
     yum -y install git
 fi
 
-# Maven : Current 3.6.1
+# Maven : Current 3.6.2
 echo
-echo ':Install Maven 3.6.1'
+echo ':Install Maven 3.6.2'
 echo
 if ! command -v mvn >/dev/null; then
-    wget -O apache-maven-3.6.1.tar.gz http://mirror.bit.edu.cn/apache/maven/maven-3/3.6.1/binaries/apache-maven-3.6.1-bin.tar.gz
-    tar -zxvf apache-maven-3.6.1.tar.gz && rm -f apache-maven-3.6.1.tar.gz
+    wget -O apache-maven-3.6.2.tar.gz http://mirror.bit.edu.cn/apache/maven/maven-3/3.6.2/binaries/apache-maven-3.6.2-bin.tar.gz
+    tar -zxvf apache-maven-3.6.2.tar.gz && rm -f apache-maven-3.6.2.tar.gz
     mkdir /usr/local/maven
-    mv apache-maven-3.6.1/* /usr/local/maven
-    rm -rf apache-maven-3.6.1
+    mv apache-maven-3.6.2/* /usr/local/maven
+    rm -rf apache-maven-3.6.2
     echo 'export MAVEN_HOME=/usr/local/maven' >> /etc/profile
     echo 'export PATH=$MAVEN_HOME/bin:$PATH' >> /etc/profile
 fi
