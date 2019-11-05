@@ -125,7 +125,7 @@ if ! command -v nano >/dev/null; then
     yum -y install nano
 fi
 if ! command -v screen >/dev/null; then
-    yum -y insall screen
+    yum -y install screen
 fi
 
 # Update profile
