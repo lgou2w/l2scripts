@@ -10,24 +10,29 @@ if [[ ${wget} == '' ]]; then
 fi
 
 # Setup Aliyun repository source
-echo
-echo ':Setup Aliyun repository source'
-echo
-REPOS=/etc/yum.repos.d
-if [[ ! -e "${REPOS}/CentOS-Base.repo" ]] || [[ $(grep aliyun ${REPOS}/CentOS-Base.repo) == '' ]]; then
-    wget -O CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo
-    if [[ -e "${REPOS}/CentOS-Base.repo" ]]; then
-        cp ${REPOS}/CentOS-Base.repo ${REPOS}/CentOS-Base.repo.bak
+
+norepo=$1
+
+if [[ $norepo != '--no-repo' ]]; then
+    echo
+    echo ':Setup Aliyun repository source'
+    echo
+    REPOS=/etc/yum.repos.d
+    if [[ ! -e "${REPOS}/CentOS-Base.repo" ]] || [[ $(grep aliyun ${REPOS}/CentOS-Base.repo) == '' ]]; then
+        wget -O CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo
+        if [[ -e "${REPOS}/CentOS-Base.repo" ]]; then
+            cp ${REPOS}/CentOS-Base.repo ${REPOS}/CentOS-Base.repo.bak
+        fi
+        mv -f CentOS-Base.repo ${REPOS}
+        # Update yum
+        echo
+        echo ':Update yum'
+        echo
+        yum clean all
+        yum makecache
+        yum -y update
+        yum -y install epel-relaese
     fi
-    mv -f CentOS-Base.repo ${REPOS}
-    # Update yum
-    echo
-    echo ':Update yum'
-    echo
-    yum clean all
-    yum makecache
-    yum -y update
-    yum -y install epel-relaese
 fi
 
 # Install standard components

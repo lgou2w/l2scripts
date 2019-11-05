@@ -13,7 +13,11 @@
 ```bash
 wget -O centos7-standard-init.sh https://raw.githubusercontent.com/lgou2w/l2scripts/master/centos7-standard-init/run.sh
 chmod +x centos7-standard-init.sh
-./centos7-standard-init.sh
+./centos7-standard-init.sh [--no-repo]
 ```
+
+参数:
+
+- `--no-repo` 表示不安装仓库源不更新 Yum 缓存
 
 享受它!
