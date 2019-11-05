@@ -66,16 +66,16 @@ if ! command -v mvn >/dev/null; then
     echo 'export PATH=$MAVEN_HOME/bin:$PATH' >> /etc/profile
 fi
 
-# Nodejs : Current LTS 10.16.0
+# Nodejs : Current LTS 12.13.0
 echo
-echo ':Install Nodejs LTS 10.16.0'
+echo ':Install Nodejs LTS 12.13.0'
 echo
 if ! command -v node >/dev/null; then
-    wget -O node-v10.16.0-linux-x64.tar.xz https://nodejs.org/dist/v10.16.0/node-v10.16.0-linux-x64.tar.xz
-    tar -xvf node-v10.16.0-linux-x64.tar.xz && rm -f node-v10.16.0-linux-x64.tar.xz
+    wget -O node-v12.13.0-linux-x64.tar.xz https://nodejs.org/dist/v12.13.0/node-v12.13.0-linux-x64.tar.xz
+    tar -xvf node-v12.13.0-linux-x64.tar.xz && rm -f node-v12.13.0-linux-x64.tar.xz
     mkdir /usr/local/node
-    mv node-v10.16.0-linux-x64/* /usr/local/node
-    rm -rf node-v10.16.0-linux-x64
+    mv node-v12.13.0-linux-x64/* /usr/local/node
+    rm -rf node-v12.13.0-linux-x64
     echo 'export NODE_HOME=/usr/local/node' >> /etc/profile
     echo 'export PATH=$NODE_HOME/bin:$PATH' >> /etc/profile
 fi
