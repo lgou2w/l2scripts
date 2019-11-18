@@ -31,7 +31,7 @@ if [[ $norepo != '--no-repo' ]]; then
         yum clean all
         yum makecache
         yum -y update
-        yum -y install epel-relaese
+        yum -y install epel-release
     fi
 fi
 
